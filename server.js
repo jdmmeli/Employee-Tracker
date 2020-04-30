@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
 
     // Your password
     password: "1Grondster43!",
-    database: "employee_db"
+    database: "employee_DB"
 });
 
 connection.connect(function (err) {
@@ -31,8 +31,6 @@ function runSearch() {
                 "View all departments",
                 "View all roles",
                 "View all employees",
-                "Update departments",
-                "Update roles",
                 "Update employees",
                 "Add department",
                 "Add roles",
@@ -53,14 +51,6 @@ function runSearch() {
 
                 case "View all employees":
                     viewEmployees();
-                    break;
-
-                case "Update Departments":
-                    updateDepartments();
-                    break;
-
-                case "Update Roles":
-                    updateRoles();
                     break;
 
                 case "Update Employees":
@@ -85,3 +75,80 @@ function runSearch() {
             }
         });
 }
+
+function viewDepartments() {
+    console.log("Selecting all departments...\n");
+    connection.query("SELECT * FROM departments", function(err, res) {
+      if (err) throw err;
+      console.log(res);
+      console.table('All Departments:', res);
+    //   runSearch();
+    });
+    runSearch();
+  }
+
+  function viewRoles() {
+    console.log("Selecting all roles...\n");
+    connection.query("SELECT * FROM roles", function(err, res) {
+      if (err) throw err;
+      console.log(res);
+      console.table('All roles:', res);
+    //   runSearch();
+    });
+    runSearch();
+  }
+
+  function viewEmployees() {
+    console.log("Selecting all employees...\n");
+    connection.query("SELECT * FROM employees", function(err, res) {
+      if (err) throw err;
+      console.log(res);
+      console.table('All employees:', res);
+    //   runSearch();
+    });
+    runSearch();
+  }
+  // function updateEmployees() {
+  //   console.log("Updating all Beatles genres...\n");
+  //   var query = connection.query(
+  //     "UPDATE songs SET ? WHERE ?",
+  //     [
+  //       {
+  //         genre: "classic rock"
+  //       },
+  //       {
+  //         artist: "Beatles"
+  //       }
+  //     ],
+  //     function(err, res) {
+  //       if (err) throw err;
+  //       console.log(res.affectedRows + " genre updated!\n");
+        
+       
+  //     }
+  //   );
+  //   runSearch();
+  // }
+  function addDepartment() {
+    inquirer
+      .prompt({
+        type: "input",
+        message: "enter department name",
+        name: "dept"
+      })
+      .then(function(answer) {
+        connection.query(
+          "INSERT INTO department SET ?",
+          {
+            name: answer.dept
+          },
+          function(err, answer) {
+            if (err) {
+              throw err;
+            }
+          }
+        ),
+          console.table(answer);
+        // runSearch();
+      }); runSearch();
+  }
