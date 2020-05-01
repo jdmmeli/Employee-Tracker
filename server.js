@@ -22,67 +22,55 @@ connection.connect(function (err) {
 });
 
 function runSearch() {
-    inquirer
-        .prompt({
-            name: "action",
-            type: "list",
-            message: "Employee database. Choose an action",
-            choices: [
-                "View all departments",
-                "View all roles",
-                "View all employees",
-                "Update employees",
-                "Add department",
-                "Add roles",
-                "Add employees",
-                "exit"
-
-            ]
-        })
-        .then(function (answer) {
-            switch (answer.action) {
-                case "View all departments":
-                    viewDepartments();
-                    break;
-
-                case "View all roles":
-                    viewRoles();
-                    break;
-
-                case "View all employees":
-                    viewEmployees();
-                    break;
-
-                case "Update Employees":
-                    updateEmployees();
-                    break;
-
-                case "Add Departments":
-                    addDepartments();
-                    break;
-
-                case "Add Roles":
-                    addRoles();
-                    break;
-
-                case "Add employeess":
-                    addEmployees();
-                    break;
-
-                case "exit":
-                    connection.end();
-                    break;
-            }
-        });
+  inquirer
+  .prompt({
+      name: "action",
+      type: "list",
+      message: "Welcome to our employee database! What would you like to do?",
+      choices: [
+              "View all employees",
+              "View all departments",
+              "View all roles",
+              "Add an employee",
+              "Add department",
+              "Add a role",
+              "EXIT"
+      ]
+  }).then(function (answer) {
+      switch (answer.action) {
+          case "View all employees":
+              viewEmployees();
+              break;
+          case "View all departments":
+              viewDepartments();
+              break;
+          case "View all roles":
+              viewRoles();
+              break;
+          case "Add an employee":
+              addEmployee();
+              break;
+          case "Add department":
+              addDepartment();
+              break;
+          case "Add a role":
+              addRole();
+              break;
+          case "EXIT": 
+              endApp();
+              break;
+          default:
+              break;
+      }
+  })
 }
-
 function viewDepartments() {
     console.log("Selecting all departments...\n");
     connection.query("SELECT * FROM departments", function(err, res) {
       if (err) throw err;
       console.log(res);
       console.table('All Departments:', res);
-    //   runSearch();
+      // runSearch();
     });
     runSearch();
   }
@@ -93,7 +81,7 @@ function viewDepartments() {
       if (err) throw err;
       console.log(res);
       console.table('All roles:', res);
-    //   runSearch();
+      // runSearch();
     });
     runSearch();
   }
@@ -104,7 +92,7 @@ function viewDepartments() {
       if (err) throw err;
       console.log(res);
       console.table('All employees:', res);
-    //   runSearch();
+      // runSearch();
     });
     runSearch();
   }
@@ -138,7 +126,7 @@ function viewDepartments() {
       })
       .then(function(answer) {
         connection.query(
-          "INSERT INTO department SET ?",
+          "INSERT INTO departments SET ?",
           {
             name: answer.dept
           },
@@ -149,6 +137,86 @@ function viewDepartments() {
           }
         ),
           console.table(answer);
-        // runSearch();
-      }); runSearch();
+          runSearch();
+      }); 
+  }
+  function addRole() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "enter employee title",
+          name: "addtitle"
+        },
+        {
+          type: "input",
+          message: "enter employee salary",
+          name: "addsalary"
+        },
+        {
+          type: "input",
+          message: "enter employee department id",
+          name: "addDepId"
+        }
+      ])
+      .then(function(answer) {
+        connection.query(
+          "INSERT INTO roles SET ?",
+          {
+            title: answer.addtitle,
+            salary: answer.addsalary,
+            department_id: answer.addDepId
+          },
+          function(err, answer) {
+            if (err) {
+              throw err;
+            }
+            console.table(answer);
+            runSearch();
+          }
+        );
+       
+      }); 
+  }
+  function addEmployee() {
+    inquirer
+      .prompt({
+        type: "input",
+        message: "enter employees first name",
+        name: "firstname"
+      },
+        {
+          type: "input",
+          message: "enter employees last name",
+          name: "lastname"
+        },
+        {
+          type: "input",
+          message: "enter employees role id",
+          name: "roleid"
+        },
+        {
+          type: "input",
+          message: "enter employees manager id",
+          name: "managerid"
+        
+        })
+      .then(function(answer) {
+        connection.query(
+          "INSERT INTO employees SET ?",
+          {
+            first_name: answer.firstname,
+            last_name: answer.lastname,
+            role_id: answer.rollid,
+            manager_id: answer.managerid
+          },
+          function(err, answer) {
+            if (err) {
+              throw err;
+            }
+          }
+        ),
+          console.table(answer);
+          runSearch();
+      }); 
   }
