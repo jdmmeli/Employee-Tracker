@@ -1,10 +1,11 @@
-INSERT INTO department (name)
+-- populates the database
+INSERT INTO departments (name)
 VALUES ("Accounting"),
 ("Sales"),
 ("Warehouse"),
 ("Legal");
 
-INSERT INTO role (title, salary, department_id)
+INSERT INTO roles (title, salary, department_id)
 VALUES 
 ("Accountant", 75.5, 1),
 ("Lead Accountant", 95.7, 1),
@@ -15,7 +16,7 @@ VALUES
 ("Lawyer", 120.1, 4),
 ("Lead Counsel", 150.1, 4);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES 
 ("Ned", "Reyerson" 1, 1),
 ("Archimedes", "Johnson", 1, 1),
